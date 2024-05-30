@@ -1,0 +1,14 @@
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\bin\Debug\net6.0\KPZLab1.exe
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\bin\Debug\net6.0\KPZLab1.deps.json
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\bin\Debug\net6.0\KPZLab1.runtimeconfig.json
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\bin\Debug\net6.0\KPZLab1.dll
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\bin\Debug\net6.0\KPZLab1.pdb
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\obj\Debug\net6.0\KPZLab1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\obj\Debug\net6.0\KPZLab1.AssemblyInfoInputs.cache
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\obj\Debug\net6.0\KPZLab1.AssemblyInfo.cs
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\obj\Debug\net6.0\KPZLab1.csproj.CoreCompileInputs.cache
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\obj\Debug\net6.0\KPZLab1.dll
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\obj\Debug\net6.0\refint\KPZLab1.dll
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\obj\Debug\net6.0\KPZLab1.pdb
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\obj\Debug\net6.0\KPZLab1.genruntimeconfig.cache
+C:\Users\miqvr\Desktop\практика2курс\KPZLab1\KPZLab1\obj\Debug\net6.0\ref\KPZLab1.dll
