@@ -2,74 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-public interface IIterator<T>
-{
-    bool HasNext();
-    T Next();
-}
-public class DepthFirstIterator : IIterator<LightNode>
-{
-    private Stack<LightNode> stack = new Stack<LightNode>();
-
-    public DepthFirstIterator(LightNode root)
-    {
-        stack.Push(root);
-    }
-
-    public bool HasNext()
-    {
-        return stack.Count > 0;
-    }
-
-    public LightNode Next()
-    {
-        if (!HasNext()) throw new InvalidOperationException();
-
-        var current = stack.Pop();
-
-        if (current is LightElementNode elementNode)
-        {
-            for (int i = elementNode.Children.Count - 1; i >= 0; i--)
-            {
-                stack.Push(elementNode.Children[i]);
-            }
-        }
-
-        return current;
-    }
-}
-public class BreadthFirstIterator : IIterator<LightNode>
-{
-    private Queue<LightNode> queue = new Queue<LightNode>();
-
-    public BreadthFirstIterator(LightNode root)
-    {
-        queue.Enqueue(root);
-    }
-
-    public bool HasNext()
-    {
-        return queue.Count > 0;
-    }
-
-    public LightNode Next()
-    {
-        if (!HasNext()) throw new InvalidOperationException();
-
-        var current = queue.Dequeue();
-
-        if (current is LightElementNode elementNode)
-        {
-            foreach (var child in elementNode.Children)
-            {
-                queue.Enqueue(child);
-            }
-        }
-
-        return current;
-    }
-}
-
 public abstract class LightNode
 {
     public abstract string OuterHTML { get; }
@@ -145,7 +77,6 @@ public class LightElementNode : LightNode
         }
     }
 
-
     public override string InnerHTML
     {
         get
@@ -165,13 +96,50 @@ public class LightElementNode : LightNode
     {
         Children.Add(child);
     }
-    public IIterator<LightNode> GetDepthFirstIterator()
+}
+
+
+public abstract class Command
+{
+    public abstract void Execute(LightElementNode node);
+}
+
+public class AddCssClassCommand : Command
+{
+    private string _cssClass;
+
+    public AddCssClassCommand(string cssClass)
     {
-        return new DepthFirstIterator(this);
+        _cssClass = cssClass;
     }
 
-    public IIterator<LightNode> GetBreadthFirstIterator()
+    public override void Execute(LightElementNode node)
     {
-        return new BreadthFirstIterator(this);
+        node.CssClasses.Add(_cssClass);
+    }
+}
+
+public class AddChildCommand : Command
+{
+    private LightNode _child;
+
+    public AddChildCommand(LightNode child)
+    {
+        _child = child;
+    }
+
+    public override void Execute(LightElementNode node)
+    {
+        node.AddChild(_child);
+    }
+}
+public class CommandManager
+{
+    private List<Command> _commands = new List<Command>();
+
+    public void ExecuteCommand(Command command, LightElementNode node)
+    {
+        command.Execute(node);
+        _commands.Add(command);
     }
 }
