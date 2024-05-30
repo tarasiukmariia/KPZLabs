@@ -1,0 +1,14 @@
+D:\унік\Маша\lab3\lab3\task4\bin\Debug\net8.0\task4.exe
+D:\унік\Маша\lab3\lab3\task4\bin\Debug\net8.0\task4.deps.json
+D:\унік\Маша\lab3\lab3\task4\bin\Debug\net8.0\task4.runtimeconfig.json
+D:\унік\Маша\lab3\lab3\task4\bin\Debug\net8.0\task4.dll
+D:\унік\Маша\lab3\lab3\task4\bin\Debug\net8.0\task4.pdb
+D:\унік\Маша\lab3\lab3\task4\obj\Debug\net8.0\task4.GeneratedMSBuildEditorConfig.editorconfig
+D:\унік\Маша\lab3\lab3\task4\obj\Debug\net8.0\task4.AssemblyInfoInputs.cache
+D:\унік\Маша\lab3\lab3\task4\obj\Debug\net8.0\task4.AssemblyInfo.cs
+D:\унік\Маша\lab3\lab3\task4\obj\Debug\net8.0\task4.csproj.CoreCompileInputs.cache
+D:\унік\Маша\lab3\lab3\task4\obj\Debug\net8.0\task4.dll
+D:\унік\Маша\lab3\lab3\task4\obj\Debug\net8.0\refint\task4.dll
+D:\унік\Маша\lab3\lab3\task4\obj\Debug\net8.0\task4.pdb
+D:\унік\Маша\lab3\lab3\task4\obj\Debug\net8.0\task4.genruntimeconfig.cache
+D:\унік\Маша\lab3\lab3\task4\obj\Debug\net8.0\ref\task4.dll
