@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 
-public interface INodeVisitor
-{
-    void VisitTextNode(LightTextNode node);
-    void VisitElementNode(LightElementNode node);
-}
-
 public abstract class LightNode
 {
     public abstract string OuterHTML { get; }
     public abstract string InnerHTML { get; }
-    public abstract void Accept(INodeVisitor visitor);
+    protected virtual void OnCreated() { }
+    public virtual void OnInserted() { }
+    protected virtual void OnRemoved() { }
+    protected virtual void OnStylesApplied() { }
+    protected virtual void OnClassListApplied() { }
+    protected virtual void OnTextRendered() { }
 }
-
 
 public class LightTextNode : LightNode
 {
@@ -27,9 +25,10 @@ public class LightTextNode : LightNode
 
     public override string OuterHTML => Text;
     public override string InnerHTML => Text;
-    public override void Accept(INodeVisitor visitor)
+
+    protected override void OnTextRendered()
     {
-        visitor.VisitTextNode(this);
+        Console.WriteLine("Text node rendered.");
     }
 }
 
@@ -66,12 +65,14 @@ public class LightElementNode : LightNode
     {
         get
         {
+            OnCreated();
             StringBuilder sb = new StringBuilder();
             sb.Append($"<{TagName}");
 
             if (CssClasses.Count > 0)
             {
                 sb.Append($" class=\"{string.Join(" ", CssClasses)}\"");
+                OnClassListApplied();
             }
 
             if (Closing == ClosingType.SelfClosing)
@@ -98,6 +99,7 @@ public class LightElementNode : LightNode
             foreach (var child in Children)
             {
                 sb.Append(child.OuterHTML);
+                child.OnInserted();
             }
 
             return sb.ToString();
@@ -108,32 +110,14 @@ public class LightElementNode : LightNode
     {
         Children.Add(child);
     }
-    public override void Accept(INodeVisitor visitor)
-    {
-        visitor.VisitElementNode(this);
-    }
-}
-public class NodePrinterVisitor : INodeVisitor
-{
-    private StringBuilder _resultBuilder;
 
-    public NodePrinterVisitor()
+    protected override void OnRemoved()
     {
-        _resultBuilder = new StringBuilder();
+        Console.WriteLine("Element node removed.");
     }
 
-    public string GetResult()
+    protected override void OnStylesApplied()
     {
-        return _resultBuilder.ToString();
-    }
-
-    public void VisitTextNode(LightTextNode node)
-    {
-        _resultBuilder.Append(node.OuterHTML);
-    }
-
-    public void VisitElementNode(LightElementNode node)
-    {
-        _resultBuilder.Append(node.OuterHTML);
+        Console.WriteLine("Styles applied to element node.");
     }
 }
