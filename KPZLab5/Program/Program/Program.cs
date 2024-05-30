@@ -2,6 +2,74 @@
 using System.Collections.Generic;
 using System.Text;
 
+public interface IIterator<T>
+{
+    bool HasNext();
+    T Next();
+}
+public class DepthFirstIterator : IIterator<LightNode>
+{
+    private Stack<LightNode> stack = new Stack<LightNode>();
+
+    public DepthFirstIterator(LightNode root)
+    {
+        stack.Push(root);
+    }
+
+    public bool HasNext()
+    {
+        return stack.Count > 0;
+    }
+
+    public LightNode Next()
+    {
+        if (!HasNext()) throw new InvalidOperationException();
+
+        var current = stack.Pop();
+
+        if (current is LightElementNode elementNode)
+        {
+            for (int i = elementNode.Children.Count - 1; i >= 0; i--)
+            {
+                stack.Push(elementNode.Children[i]);
+            }
+        }
+
+        return current;
+    }
+}
+public class BreadthFirstIterator : IIterator<LightNode>
+{
+    private Queue<LightNode> queue = new Queue<LightNode>();
+
+    public BreadthFirstIterator(LightNode root)
+    {
+        queue.Enqueue(root);
+    }
+
+    public bool HasNext()
+    {
+        return queue.Count > 0;
+    }
+
+    public LightNode Next()
+    {
+        if (!HasNext()) throw new InvalidOperationException();
+
+        var current = queue.Dequeue();
+
+        if (current is LightElementNode elementNode)
+        {
+            foreach (var child in elementNode.Children)
+            {
+                queue.Enqueue(child);
+            }
+        }
+
+        return current;
+    }
+}
+
 public abstract class LightNode
 {
     public abstract string OuterHTML { get; }
@@ -77,6 +145,7 @@ public class LightElementNode : LightNode
         }
     }
 
+
     public override string InnerHTML
     {
         get
@@ -95,5 +164,14 @@ public class LightElementNode : LightNode
     public void AddChild(LightNode child)
     {
         Children.Add(child);
+    }
+    public IIterator<LightNode> GetDepthFirstIterator()
+    {
+        return new DepthFirstIterator(this);
+    }
+
+    public IIterator<LightNode> GetBreadthFirstIterator()
+    {
+        return new BreadthFirstIterator(this);
     }
 }
