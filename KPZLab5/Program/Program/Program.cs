@@ -2,6 +2,28 @@
 using System.Collections.Generic;
 using System.Text;
 
+public interface IElementState
+{
+    string Render(LightElementNode element);
+}
+public class BlockDisplayState : IElementState
+{
+    public string Render(LightElementNode element)
+    {
+        element.Display = DisplayType.Block;
+        return element.OuterHTML;
+    }
+}
+
+public class InlineDisplayState : IElementState
+{
+    public string Render(LightElementNode element)
+    {
+        element.Display = DisplayType.Inline;
+        return element.OuterHTML;
+    }
+}
+
 public abstract class LightNode
 {
     public abstract string OuterHTML { get; }
@@ -40,6 +62,7 @@ public class LightElementNode : LightNode
     public ClosingType Closing { get; set; }
     public List<string> CssClasses { get; set; }
     public List<LightNode> Children { get; set; }
+    private IElementState currentState;
 
     public LightElementNode(string tagName, DisplayType display, ClosingType closing)
     {
@@ -48,6 +71,7 @@ public class LightElementNode : LightNode
         Closing = closing;
         CssClasses = new List<string>();
         Children = new List<LightNode>();
+        currentState = new BlockDisplayState();
     }
 
     public override string OuterHTML
@@ -96,50 +120,13 @@ public class LightElementNode : LightNode
     {
         Children.Add(child);
     }
-}
-
-
-public abstract class Command
-{
-    public abstract void Execute(LightElementNode node);
-}
-
-public class AddCssClassCommand : Command
-{
-    private string _cssClass;
-
-    public AddCssClassCommand(string cssClass)
+    public void SetState(IElementState state)
     {
-        _cssClass = cssClass;
+        currentState = state;
     }
 
-    public override void Execute(LightElementNode node)
+    public string Render()
     {
-        node.CssClasses.Add(_cssClass);
-    }
-}
-
-public class AddChildCommand : Command
-{
-    private LightNode _child;
-
-    public AddChildCommand(LightNode child)
-    {
-        _child = child;
-    }
-
-    public override void Execute(LightElementNode node)
-    {
-        node.AddChild(_child);
-    }
-}
-public class CommandManager
-{
-    private List<Command> _commands = new List<Command>();
-
-    public void ExecuteCommand(Command command, LightElementNode node)
-    {
-        command.Execute(node);
-        _commands.Add(command);
+        return currentState.Render(this);
     }
 }
