@@ -2,33 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 
-public interface IElementState
+public interface INodeVisitor
 {
-    string Render(LightElementNode element);
-}
-public class BlockDisplayState : IElementState
-{
-    public string Render(LightElementNode element)
-    {
-        element.Display = DisplayType.Block;
-        return element.OuterHTML;
-    }
-}
-
-public class InlineDisplayState : IElementState
-{
-    public string Render(LightElementNode element)
-    {
-        element.Display = DisplayType.Inline;
-        return element.OuterHTML;
-    }
+    void VisitTextNode(LightTextNode node);
+    void VisitElementNode(LightElementNode node);
 }
 
 public abstract class LightNode
 {
     public abstract string OuterHTML { get; }
     public abstract string InnerHTML { get; }
+    public abstract void Accept(INodeVisitor visitor);
 }
+
 
 public class LightTextNode : LightNode
 {
@@ -41,6 +27,10 @@ public class LightTextNode : LightNode
 
     public override string OuterHTML => Text;
     public override string InnerHTML => Text;
+    public override void Accept(INodeVisitor visitor)
+    {
+        visitor.VisitTextNode(this);
+    }
 }
 
 public enum DisplayType
@@ -62,7 +52,6 @@ public class LightElementNode : LightNode
     public ClosingType Closing { get; set; }
     public List<string> CssClasses { get; set; }
     public List<LightNode> Children { get; set; }
-    private IElementState currentState;
 
     public LightElementNode(string tagName, DisplayType display, ClosingType closing)
     {
@@ -71,7 +60,6 @@ public class LightElementNode : LightNode
         Closing = closing;
         CssClasses = new List<string>();
         Children = new List<LightNode>();
-        currentState = new BlockDisplayState();
     }
 
     public override string OuterHTML
@@ -120,13 +108,32 @@ public class LightElementNode : LightNode
     {
         Children.Add(child);
     }
-    public void SetState(IElementState state)
+    public override void Accept(INodeVisitor visitor)
     {
-        currentState = state;
+        visitor.VisitElementNode(this);
+    }
+}
+public class NodePrinterVisitor : INodeVisitor
+{
+    private StringBuilder _resultBuilder;
+
+    public NodePrinterVisitor()
+    {
+        _resultBuilder = new StringBuilder();
     }
 
-    public string Render()
+    public string GetResult()
     {
-        return currentState.Render(this);
+        return _resultBuilder.ToString();
+    }
+
+    public void VisitTextNode(LightTextNode node)
+    {
+        _resultBuilder.Append(node.OuterHTML);
+    }
+
+    public void VisitElementNode(LightElementNode node)
+    {
+        _resultBuilder.Append(node.OuterHTML);
     }
 }
